@@ -6,7 +6,16 @@ class ListAllUsersController {
   constructor(private listAllUsersUseCase: ListAllUsersUseCase) {}
 
   handle(request: Request, response: Response): Response {
-    // Complete aqui
+      const { user_id } = request.headers;
+      if (Array.isArray(user_id)) {
+        return response.status(400).json({error:"Action cannot be done"});
+      }
+      try{
+        const allUsers = this.listAllUsersUseCase.execute({user_id});
+        return response.status(200).json(allUsers);
+      }catch (e){
+        return response.status(400).json({error:"Action cannot be done"})
+      }
   }
 }
 
